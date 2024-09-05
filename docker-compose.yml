@@ -1,0 +1,56 @@
+version: '3'
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:5000"
+
+  authentication-service:
+    build: ./authentication-service
+    ports:
+      - "8081:5000"
+
+  payment-processing-service:
+    build: ./payment-processing-service
+    ports:
+      - "8082:5000"
+
+  transaction-state-service:
+    build: ./transaction-state-service
+    ports:
+      - "8083:5000"
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8084:5000"
+
+  fraud-detection-service:
+    build: ./fraud-detection-service
+    ports:
+      - "8085:5000"
+
+  settlement-service:
+    build: ./settlement-service
+    ports:
+      - "8086:5000"
+
+  user-management-service:
+    build: ./user-management-service
+    ports:
+      - "8087:5000"
+
+  reporting-service:
+    build: ./reporting-service
+    ports:
+      - "8088:5000"
+
+  monitoring-service:
+    build: ./monitoring-service
+    ports:
+      - "8089:5000"
+
+  dispute-service:
+    build: ./dispute-service
+    ports:
+      - "8090:5000"
