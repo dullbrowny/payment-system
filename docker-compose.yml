@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   traefik:
@@ -9,7 +9,7 @@ services:
       - --entrypoints.web.address=:80
     ports:
       - "80:80"
-      - "8080:8080"  # Dashboard
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -22,15 +22,15 @@ services:
       - "8081:8080"
     volumes:
       - ./keycloak-data:/opt/jboss/keycloak/standalone/data
-
   kafka:
-    image: wurstmeister/kafka:latest
-    environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    ports:
-      - "9092:9092"
+      image: wurstmeister/kafka:latest
+      environment:
+        - KAFKA_BROKER_ID=1
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+        - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092  # Kafka listens on all interfaces
+        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.0.200:9092  # Update with the correct host
+      ports:
+        - "9092:9092"  # Ensure Kafka listens on port 9092
 
   zookeeper:
     image: wurstmeister/zookeeper:latest
@@ -48,29 +48,26 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   fraud-detection-service:
-    image: openbank/fraud-ar:latest
+    build:
+      context: ./fraud-detection # Directory where your Dockerfile is located
+    image: pycaret-fraud-detection:latest
     ports:
-      - "8085:8080"
-    environment:
-      - FRAUDAR_ENV=prod
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASS=postgres
+      - "8085:5000"
 
   notification-service:
-    image: sedlakoff/kannel:latest
+    image: jookies/jasmin:latest
     ports:
-      - "13013:13013"
-      - "13000:13000"
+      - "2775:2775"
+      - "8990:8990"
     environment:
-      - KANNEL_BOX_ID=kannel
-      - KANNEL_ADMIN_PASSWORD=kannelpassword
+      - JASMIN_USER=admin
+      - JASMIN_PASSWORD=admin
 
   reporting-service:
     image: apache/superset
     environment:
       - SUPERSET_ENV=prod
+      - SECRET_KEY=p8mykGPbbLYB6p7FSuE5nyeuHtjDF24JO8ujB597GhDlsmS8cPRFihGp
     ports:
       - "8088:8088"
 
