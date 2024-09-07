@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  notification-service:
+    image: jookies/jasmin:latest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

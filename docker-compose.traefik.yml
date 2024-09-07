@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik:latest
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

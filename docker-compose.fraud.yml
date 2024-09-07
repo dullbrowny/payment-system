@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  fraud-detection-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

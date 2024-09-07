@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fraud_detection
+    networks:
+      - app-network
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    depends_on:
+      - zookeeper
+    networks:
+      - app-network
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
